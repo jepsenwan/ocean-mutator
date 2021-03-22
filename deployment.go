@@ -259,26 +259,38 @@ func oceanResourceSuggestions(context context.Context, svc *ocean.ServiceOp, oce
 				klog.V(4).Infof("suggested memory is nil")
 
 				return &corev1.ResourceList{
-					corev1.ResourceCPU: resource.MustParse(strconv.Itoa(*suggestion.SuggestedCPU) + "m"),
+					corev1.ResourceCPU: parseResourceCPU(suggestion.SuggestedCPU),
 				}, nil
 			}
 
 			if suggestion.SuggestedCPU == nil && suggestion.SuggestedMemory != nil {
 				klog.V(4).Infof("suggested cpu is nil")
 				return &corev1.ResourceList{
-					corev1.ResourceMemory: resource.MustParse(strconv.Itoa(*suggestion.SuggestedMemory) + "Mi"),
+					corev1.ResourceMemory: parseResourceMemory(suggestion.SuggestedMemory),
 				}, nil
 			}
 			klog.V(4).Infof("suggested cpu is %d", *suggestion.SuggestedCPU)
 			klog.V(4).Infof("suggested mem is %d", *suggestion.SuggestedMemory)
 
 			return &corev1.ResourceList{
-				corev1.ResourceCPU:    resource.MustParse(strconv.Itoa(*suggestion.SuggestedCPU) + "m"),
-				corev1.ResourceMemory: resource.MustParse(strconv.Itoa(*suggestion.SuggestedMemory) + "Mi"),
+				corev1.ResourceCPU:    parseResourceCPU(suggestion.SuggestedCPU),
+				corev1.ResourceMemory: parseResourceMemory(suggestion.SuggestedMemory),
 			}, nil
 		}
 	}
 	return nil, errors.New("No resource suggestions found for deployment - " + deployment)
+}
+
+func parseResourceCPU(v *float64) resource.Quantity {
+	return parseResourceValue("m", v)
+}
+
+func parseResourceMemory(v *float64) resource.Quantity {
+	return parseResourceValue("Mi", v)
+}
+
+func parseResourceValue(t string, v *float64) resource.Quantity {
+	return resource.MustParse(strconv.Itoa(int(*v)) + t)
 }
 
 func nextPO2(v int64) int64 {
