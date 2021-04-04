@@ -22,4 +22,7 @@ webhooks:
         spot.io/mutate-resource: enabled
     namespaceSelector:
       matchLabels:
-        spot.io/mutate-resource: enabled    
+        spot.io/mutate-resource: enabled
+    failurePolicy: Ignore
+    admissionReviewVersions: ["v1", "v1beta1"]
+    sideEffects: NoneOnDryRun
