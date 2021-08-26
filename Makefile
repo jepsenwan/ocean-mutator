@@ -34,12 +34,12 @@ delcerts: ## Delete all from deployment and tls directories
 
 .PHONY: build
 build: ## Build for loacl deployment
-	go build -o dist/$(IMAGE) 
+	go build -o dist/$(IMAGE)
 
 .PHONY: build-release
 build-release: ## build linux binary and docker image
-	GOOS=linux GOARCH=amd64 go build -o dist/$(IMAGE)-linux
-	docker build -t $(IMAGE_REPOSITORY)/$(IMAGE):$(IMAGE_TAG) . 
+	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -trimpath -ldflags="-extldflags=-static" -o dist/$(IMAGE)-linux
+	docker build -t $(IMAGE_REPOSITORY)/$(IMAGE):$(IMAGE_TAG) .
 
 .PHONY: push
 push:
