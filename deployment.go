@@ -272,8 +272,8 @@ func oceanResourceSuggestions(context context.Context, svc *ocean.ServiceOp, oce
 					corev1.ResourceMemory: parseResourceMemory(suggestion.SuggestedMemory),
 				}, nil
 			}
-			klog.V(4).Infof("suggested cpu is %f", *suggestion.SuggestedCPU)
-			klog.V(4).Infof("suggested mem is %f", *suggestion.SuggestedMemory)
+			klog.V(4).Infof("suggested cpu is %d", *suggestion.SuggestedCPU)
+			klog.V(4).Infof("suggested mem is %d", *suggestion.SuggestedMemory)
 
 			return &corev1.ResourceList{
 				corev1.ResourceCPU:    parseResourceCPU(suggestion.SuggestedCPU),
