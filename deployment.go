@@ -107,15 +107,15 @@ func mutateDeploymentResources(ar v1beta1.AdmissionReview) *v1beta1.AdmissionRes
 		totalCPUMili += container.Resources.Requests.Cpu().MilliValue()
 		totalMEMMb += container.Resources.Requests.Memory().Value()
 	}
-	klog.V(4).Infof("total milicore for pod %f ", totalCPUMili)
-	klog.V(4).Infof("total MB for pod - %f", totalMEMMb)
+	klog.V(4).Infof("total milicore for pod %d ", totalCPUMili)
+	klog.V(4).Infof("total MB for pod - %d", totalMEMMb)
 
 	// calc ratio for all containers
 	contRatio := make(map[string]*containerResourceRatio)
 	for _, container := range modifiedDeploy.Spec.Template.Spec.Containers {
 		cpuRatio := float64(container.Resources.Requests.Cpu().MilliValue()) / float64(totalCPUMili)
 		memRatio := float64(container.Resources.Requests.Memory().Value()) / float64(totalMEMMb)
-		klog.V(4).Infof("cpuRatio = %f , memRatio = %f", cpuRatio, memRatio)
+		klog.V(4).Infof("cpuRatio = %d , memRatio = %d", cpuRatio, memRatio)
 		contRatio[container.Name] = &containerResourceRatio{
 			CPURatio: cpuRatio,
 			MEMRatio: memRatio,
