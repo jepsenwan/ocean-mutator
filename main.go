@@ -63,11 +63,14 @@ func serve(w http.ResponseWriter, r *http.Request, admit admitFunc) {
 
 	// Return the same UID
 	responseAdmissionReview.Response.UID = requestedAdmissionReview.Request.UID
+        
+        // Add APIVersion and Kind
         responseAdmissionReview.TypeMeta = metav1.TypeMeta{
 			APIVersion: "admission.k8s.io/v1",
 			Kind:       "AdmissionReview",
 		}
 	respBytes, err := json.Marshal(responseAdmissionReview)
+        
         //klog.V(4).Infof("AdmissionReview Response = %s", string(respBytes))
 
 	if err != nil {
