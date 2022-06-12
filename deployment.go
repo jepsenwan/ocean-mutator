@@ -107,15 +107,15 @@ func mutateDeploymentResources(ar v1beta1.AdmissionReview) *v1beta1.AdmissionRes
 		totalCPUMili += container.Resources.Requests.Cpu().MilliValue()
 		totalMEMMb += container.Resources.Requests.Memory().Value()
 	}
-	klog.V(4).Infof("total milicore for pod %d ", totalCPUMili)
-	klog.V(4).Infof("total MB for pod - %d", totalMEMMb)
+	klog.V(4).Infof("total milicore for pod %f ", totalCPUMili)
+	klog.V(4).Infof("total MB for pod - %f", totalMEMMb)
 
 	// calc ratio for all containers
 	contRatio := make(map[string]*containerResourceRatio)
 	for _, container := range modifiedDeploy.Spec.Template.Spec.Containers {
 		cpuRatio := float64(container.Resources.Requests.Cpu().MilliValue()) / float64(totalCPUMili)
 		memRatio := float64(container.Resources.Requests.Memory().Value()) / float64(totalMEMMb)
-		klog.V(4).Infof("cpuRatio = %d , memRatio = %d", cpuRatio, memRatio)
+		klog.V(4).Infof("cpuRatio = %f , memRatio = %f", cpuRatio, memRatio)
 		contRatio[container.Name] = &containerResourceRatio{
 			CPURatio: cpuRatio,
 			MEMRatio: memRatio,
@@ -269,8 +269,8 @@ func oceanResourceSuggestions(context context.Context, svc *ocean.ServiceOp, oce
 					corev1.ResourceMemory: parseResourceMemory(suggestion.SuggestedMemory),
 				}, nil
 			}
-			klog.V(4).Infof("suggested cpu is %d", *suggestion.SuggestedCPU)
-			klog.V(4).Infof("suggested mem is %d", *suggestion.SuggestedMemory)
+			klog.V(4).Infof("suggested cpu is %f", *suggestion.SuggestedCPU)
+			klog.V(4).Infof("suggested mem is %f", *suggestion.SuggestedMemory)
 
 			return &corev1.ResourceList{
 				corev1.ResourceCPU:    parseResourceCPU(suggestion.SuggestedCPU),
