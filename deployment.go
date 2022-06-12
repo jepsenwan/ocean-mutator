@@ -214,7 +214,10 @@ func mutateDeploymentResources(ar v1beta1.AdmissionReview) *v1beta1.AdmissionRes
 	// }
 
 	reviewResponse.Allowed = allowResponse
+        out, _ := json.Marshal(reviewResponse)
+        klog.V(4).Infof("reviewResponse= %v", string(out))
 	return &reviewResponse
+
 }
 
 func resourceSuggestions(deployment, namespace string) (*corev1.ResourceList, error) {
