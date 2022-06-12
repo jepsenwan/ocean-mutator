@@ -215,7 +215,6 @@ func mutateDeploymentResources(ar v1beta1.AdmissionReview) *v1beta1.AdmissionRes
 
 	reviewResponse.Allowed = allowResponse
 	return &reviewResponse
-
 }
 
 func resourceSuggestions(deployment, namespace string) (*corev1.ResourceList, error) {
